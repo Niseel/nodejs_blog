@@ -11,6 +11,14 @@ npm install
 
 - **Để chạy chương trình**
 
+- **terminal 1 - run and watch change js json file**
+
 ```
 npm start
+```
+
+- **terminal 2 - watch compile scss**
+
+```
+npm run watch
 ```
