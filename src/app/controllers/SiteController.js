@@ -4,14 +4,14 @@ const { mongoosesToObject } = require('../../util/mongoose')
 class SitesController {
     // [GET] /news
     index(req, res, next) {
+        res.render('home');
+
         // Promise
-        Post.find({})
-            .then(posts => res.render('news', {
-                posts: mongoosesToObject(posts),
-            }))
-            .catch(next);
-            // shorthand
-            //.catch(error => next(error));
+        // Post.find({})
+        //     .then(posts => res.json(posts))
+        //     .catch(next);
+            // // shorthand
+            // .catch(error => next(error));
 
 
         // Callback
