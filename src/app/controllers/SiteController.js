@@ -1,13 +1,24 @@
 const Post = require('../models/Post')
+const { mongoosesToObject } = require('../../util/mongoose')
 
 class SitesController {
     // [GET] /news
     index(req, res, next) {
+        // Promise
+        Post.find({})
+            .then(posts => res.render('news', {
+                posts: mongoosesToObject(posts),
+            }))
+            .catch(next);
+            // shorthand
+            //.catch(error => next(error));
 
-        Post.find({}, function (err, posts) {
-            if(!err)  res.json(posts);
-            else res.status(400).json({ error: 'message' });
-          });
+
+        // Callback
+        // Post.find({}, function (err, posts) {
+        //     if(!err)  res.json(posts);
+        //     else res.status(400).json({ error: 'message' });
+        //   });
     }
 
     // [GET] /news/:slug
