@@ -8,10 +8,10 @@ async function connectDB() {
             useFindAndModify: false,
             useCreateIndex: true
         });
-        console.log("Connect Successfully !!!");
+        console.log("Connect Successfully !!!\n\n");
     } catch (error) {
-        console.log("Connect Failuare !!!");
-        console.log("Error: ", error);
+        console.log("Connect Failuare !!!\n");
+        console.log("Error: ", error, '\n\n');
     }
 
 }
