@@ -1,13 +1,18 @@
-const express = require("express");
-const morgan = require("morgan");
-const handlebars = require("express-handlebars");
-const path = require("path");
+const express = require('express');
+const morgan = require('morgan');
+const handlebars = require('express-handlebars');
+const path = require('path');
+const db = require('../src/app/config/db');
+
+// Connect DB
+db.connectDB();
+
 const app = express();
 const port = 3000;
-const route = require("./routes/index.route");
+const route = require('./routes/index.route');
 
 // Using static document
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Using encode request parameters
 app.use(express.urlencoded({ extended: true }));
@@ -17,13 +22,13 @@ app.use(express.json());
 // app.use(morgan("dev")); //combined
 
 // Templates engine
-app.engine("hbs", handlebars({ extname: ".hbs" }));
-app.set("view engine", "hbs");
-app.set("views", path.join(__dirname, "resources/views"));
+app.engine('hbs', handlebars({ extname: '.hbs' }));
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'resources/views'));
 
 // Route initial
 route(app);
 
 app.listen(port, () =>
-  console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`Example app listening at http://localhost:${port}`),
 );
