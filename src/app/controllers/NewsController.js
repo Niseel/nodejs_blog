@@ -19,6 +19,19 @@ class NewsController {
             }))
             .catch(next)
     }
+
+    // [GET] /news/create
+    create(req, res, next) {
+        res.render('news/create')
+    }
+
+    // [POST] /news/store
+    store(req, res, next) {
+        const post = new Post(req.body);
+        post.save()
+            .then(() => res.redirect('/news'))
+            .catch(next);
+    }
 }
 
 module.exports = new NewsController();
