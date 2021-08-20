@@ -1,19 +1,23 @@
 <div class="m-4">
     <div class="row">
         <div class="col-lg-12">
-            <h2>Create post</h2>
-            <form method="post" action="/news/store">
+            <h2>Edit post</h2>
+            <form method="post" action="/news/{{post._id}}?_method=PUT">
                 <div class="form-group">
                     <label for="postTitle" class="font-weight-bold">Title</label>
-                    <input name="title" type="text" class="form-control" id="postTitle" placeholder="Enter your post title">
+                    <input name="title" type="text" class="form-control" id="postTitle" 
+                            placeholder="Enter your post title"
+                            value="{{post.title}}">
                 </div>
                 <div class="form-group pt-3">
                     <label for="postContent" class="font-weight-bold">Content</label>
-                    <textarea name="content" class="form-control" id="postContent" rows="4" placeholder="Enter your post content"></textarea>
+                    <textarea name="content" class="form-control" id="postContent" rows="4" placeholder="Enter your post content">
+                        {{post.content}}
+                    </textarea>
                 </div>
                 <div class="form-group pt-3">
                     <label for="postCategory">Category</label>
-                    <select class="form-control" name="category" id="postCategory">
+                    <select class="form-control" name="category" id="postCategory" data-selected="{{post.category}}">
                         <option value="Sport">Sport</option>
                         <option value="Fashion">Fashion</option>
                         <option value="Society">Society</option>
@@ -22,18 +26,19 @@
                 </div>
                 <div class="form-group pt-3">
                     <label for="postAuthor">Category</label>
-                    <select class="form-control" name="author" id="postAuthor">
+                    <select class="form-control" name="author" id="postAuthor" data-selected="{{post.author}}">
                         <option value="Công Thành">Công Thành</option>
                         <option value="Đông Linh">Đông Linh</option>
                     </select>
                 </div>
                 <div class="form-group pt-3">
                     <label for="postImage" class="font-weight-bold">Image</label>
-                    <input type="text" class="form-control" name="image" id="postImage" value="https://picsum.photos/200/300" placeholder="Enter your image link">
+                    <input type="text" class="form-control" name="image" id="postImage"     
+                        placeholder="Enter your image link"
+                        value="{{post.image}}">
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                <button type="submit" class="btn btn-primary mt-3">Save</button>
             </form>
         </div>
     </div>
-
 </div>

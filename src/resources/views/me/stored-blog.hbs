@@ -1,0 +1,26 @@
+<table class="table mt-5">
+  <thead>
+    <tr class="table-primary">
+      <th scope="col">#</th>
+      <th scope="col">Title</th>
+      <th scope="col">Author</th>
+      <th scope="col">Category</th>
+      <th scope="col" colspan="2">Release</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each posts}}
+    <tr>
+      <th scope="row">{{sum @index 1}}</th>
+      <td>{{this.title}}</td>
+      <td>{{this.author}}</td>
+      <td>{{this.category}}</td>
+      <td>{{this.createdAt}}</td>
+      <td>
+          <a class="link link-primary" href="/news/{{_id}}/edit">Edit</a>
+          <a class="link link-danger" href="/me/{{_id}}/remove">Remove</a>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
