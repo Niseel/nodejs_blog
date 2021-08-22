@@ -48,6 +48,13 @@ class NewsController {
             .then(() => res.redirect('/me/stored/blog'))
             .catch(next)
     }
+
+    // [DELETE] /news/:id
+    remove(req, res, next) {
+        Post.deleteOne({ _id: req.params.id })
+            .then(() => res.redirect('back'))
+            .catch(next)
+    }
 }
 
 module.exports = new NewsController();

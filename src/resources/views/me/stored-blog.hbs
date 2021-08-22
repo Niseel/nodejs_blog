@@ -12,15 +12,67 @@
     {{#each posts}}
     <tr>
       <th scope="row">{{sum @index 1}}</th>
-      <td>{{this.title}}</td>
-      <td>{{this.author}}</td>
-      <td>{{this.category}}</td>
-      <td>{{this.createdAt}}</td>
+      <td>{{title}}</td>
+      <td>{{author}}</td>
+      <td>{{category}}</td>
+      <td>{{createdAt}}</td>
       <td>
           <a class="link link-primary" href="/news/{{_id}}/edit">Edit</a>
-          <a class="link link-danger" href="/me/{{_id}}/remove">Remove</a>
+          <a class="link link-danger" href="" 
+              data-toggle="modal" 
+              data-target="#remove-blog-modal"
+              data-id="{{_id}}">
+            Remove
+          </a>
       </td>
     </tr>
     {{/each}}
   </tbody>
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="remove-blog-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm remove</h5>
+      </div>
+      <div class="modal-body">
+        This will permanently delete your post with ID:
+        <p id="remove-id" class="text-bold">___</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button id="remove-btn" type="button" class="btn btn-danger">Remove</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden form remove -->
+<form id="remove-form" method="post"></form>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var idRemove;
+    var idDialog = document.getElementById("remove-id");
+    var removeBtn = document.getElementById("remove-btn");
+    var removeForm = document.getElementById("remove-form")
+
+    $('#remove-blog-modal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      idRemove = button.data('id');
+      idDialog.innerHTML = idRemove;
+    });  
+
+    removeBtn.addEventListener("click", function() {
+      removeForm.action = '/news/' + idRemove + '?_method=DELETE';
+      removeForm.submit();      
+    })
+
+  });
+
+
+
+</script>
