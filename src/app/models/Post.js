@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const slug = require('mongoose-slug-generator');
-mongoose.plugin(slug);
+const mongooseDelete = require('mongoose-delete');
 
 const Schema = mongoose.Schema;
 
@@ -17,6 +17,12 @@ const Post = new Schema(
     timestamps: true
   });
 
+// add plugin options
+mongoose.plugin(slug);
+Post.plugin(mongooseDelete, { 
+  deletedAt : true,
+  overrideMethods: 'all',
+});
 
 // đối số đầu sẽ tự quy về chữ thường, dạng số nhiều khi lên db nếu chưa có collection đó
 // đối số thứ 2 là schema - cái khung model mình vừa tạo

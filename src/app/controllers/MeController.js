@@ -10,6 +10,15 @@ class MeController {
             }))
             .catch(next);
     }
+
+    // [GET] /me/trash/blog
+    trashBlog(req, res, next){
+        Post.findDeleted({})
+        .then(posts => res.render('me/trash-blog', {
+            posts: mongoosesToObject(posts),
+        }))
+        .catch(next);
+    }
 }
 
 module.exports = new MeController();

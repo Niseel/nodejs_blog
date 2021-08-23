@@ -49,8 +49,22 @@ class NewsController {
             .catch(next)
     }
 
+    // [PATCH] /news/:id/restore
+    restore(req, res, next) {
+        Post.restore({ _id: req.params.id })
+            .then(() => res.redirect('/me/stored/blog'))
+            .catch(next)
+    }
+
     // [DELETE] /news/:id
     remove(req, res, next) {
+        Post.delete({ _id: req.params.id })
+            .then(() => res.redirect('back'))
+            .catch(next)
+    }
+
+    // [DELETE] /news/:id/force
+    forceRemove(req, res, next) {
         Post.deleteOne({ _id: req.params.id })
             .then(() => res.redirect('back'))
             .catch(next)

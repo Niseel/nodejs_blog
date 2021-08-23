@@ -1,5 +1,5 @@
-<h2 class="mt-3">Post List</h2>
-<p><a href="/me/trash/blog" class="link link-primary">Recycle bin</a></p>
+<p class="mt-3"><a href="/me/stored/blog" class="link link-primary">Back</a></p>
+<h2>Trash List</h2>
 <table class="table mt-3">
     {{#if posts}}
     <thead>
@@ -20,12 +20,16 @@
       <td>{{category}}</td>
       <td>{{createdAt}}</td>
       <td>
-          <a class="link link-primary" href="/news/{{_id}}/edit">Edit</a>
+          <a class="link link-success restore-btn" 
+              href="/news/{{_id}}/restore"
+              data-id="{{_id}}">
+            Restore
+          </a>
           <a class="link link-danger" href="" 
               data-toggle="modal" 
               data-target="#remove-blog-modal"
               data-id="{{_id}}">
-            Remove
+            Delete
           </a>
       </td>
     </tr>
@@ -33,8 +37,8 @@
     {{else}}
     <tr>
       <td colspan="5" class="text-center">
-        There are currently no posts
-        <a href="/news/create">Click here to create new post</a>
+        Empty recycle bin
+        <a href="/me/stored/blog">Click here to back</a>
       </td>
     </tr>
     {{/if}}
@@ -46,22 +50,23 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirm remove</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Confirm delete</h5>
       </div>
       <div class="modal-body">
-        This action will move your post to the trash: 
+        This will permanently delete your post with ID:
         <p id="remove-id" class="text-bold">___</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button id="remove-btn" type="button" class="btn btn-danger">Remove</button>
+        <button id="remove-btn" type="button" class="btn btn-danger">Delete</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Hidden form remove -->
-<form id="remove-form" method="post"></form>
+<form id="remove-form" method="POST"></form>
+<form id="restore-form" method="POST"></form>
 
 <script>
 
@@ -69,7 +74,8 @@
     var idRemove;
     var idDialog = document.getElementById("remove-id");
     var removeBtn = document.getElementById("remove-btn");
-    var removeForm = document.getElementById("remove-form")
+    var removeForm = document.getElementById("remove-form");
+    var restoreForm = document.getElementById("restore-form");
 
     $('#remove-blog-modal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget);
@@ -78,9 +84,16 @@
     });  
 
     removeBtn.addEventListener("click", function() {
-      removeForm.action = '/news/' + idRemove + '?_method=DELETE';
+      removeForm.action = '/news/' + idRemove + '/force?_method=DELETE';
       removeForm.submit();      
     })
+
+    $('.restore-btn').on('click',function(e){
+        e.preventDefault();
+        var idRestore = e.target.dataset.id;
+        restoreForm.action = '/news/' + idRestore + '/restore?_method=PATCH';
+        restoreForm.submit(); 
+    });  
 
   });
 
