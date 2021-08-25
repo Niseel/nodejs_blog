@@ -1,45 +1,68 @@
 <h2 class="mt-3">Post List</h2>
 <p><a href="/me/trash/blog" class="link link-primary">Recycle bin ({{countDeleted}})</a></p>
-<table class="table mt-3">
-    {{#if posts}}
-    <thead>
-      <tr class="table-primary">
-        <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Author</th>
-        <th scope="col">Category</th>
-        <th scope="col" colspan="2">Release</th>
+<form name="form-action-all" action="/news/handle-form-actions" method="POST" class="mt-4">
+
+  <div class="d-flex align-items-start">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="select-all-checkbox">
+      <label class="form-check-label" for="select-all-checkbox">
+        Select all
+      </label>
+    </div>
+    <select class="form-select select-action" name="action" required="required">
+      <option value="">-- Action --</option>
+      <option value="remove">Remove</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-submit-all" disabled="disabled">Submit</button>
+  </div>
+
+
+  <table class="table mt-3">
+      {{#if posts}}
+      <thead>
+        <tr class="table-primary">
+          <th scope="col" colspan="2">#</th>
+          <th scope="col">Title</th>
+          <th scope="col">Author</th>
+          <th scope="col">Category</th>
+          <th scope="col" colspan="2">Release</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each posts}}
+      <tr>
+        <th>
+          <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="blogsId[]" value="{{_id}}">
+        </div>
+        </th>
+        <th scope="row">{{sum @index 1}}</th>
+        <td>{{title}}</td>
+        <td>{{author}}</td>
+        <td>{{category}}</td>
+        <td>{{createdAt}}</td>
+        <td>
+            <a class="link link-primary" href="/news/{{_id}}/edit">Edit</a>
+            <a class="link link-danger" href="" 
+                data-toggle="modal" 
+                data-target="#remove-blog-modal"
+                data-id="{{_id}}">
+              Remove
+            </a>
+        </td>
       </tr>
-    </thead>
-    <tbody>
-    {{#each posts}}
-    <tr>
-      <th scope="row">{{sum @index 1}}</th>
-      <td>{{title}}</td>
-      <td>{{author}}</td>
-      <td>{{category}}</td>
-      <td>{{createdAt}}</td>
-      <td>
-          <a class="link link-primary" href="/news/{{_id}}/edit">Edit</a>
-          <a class="link link-danger" href="" 
-              data-toggle="modal" 
-              data-target="#remove-blog-modal"
-              data-id="{{_id}}">
-            Remove
-          </a>
-      </td>
-    </tr>
-    {{/each}}
-    {{else}}
-    <tr>
-      <td colspan="5" class="text-center">
-        There are currently no posts
-        <a href="/news/create">Click here to create new post</a>
-      </td>
-    </tr>
-    {{/if}}
-    </tbody>
-</table>
+      {{/each}}
+      {{else}}
+      <tr>
+        <td colspan="5" class="text-center">
+          There are currently no posts
+          <a href="/news/create">Click here to create new post</a>
+        </td>
+      </tr>
+      {{/if}}
+      </tbody>
+  </table>
+</form>
 
 <!-- Modal -->
 <div class="modal fade" id="remove-blog-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -69,18 +92,55 @@
     var idRemove;
     var idDialog = document.getElementById("remove-id");
     var removeBtn = document.getElementById("remove-btn");
-    var removeForm = document.getElementById("remove-form")
+    var removeForm = document.getElementById("remove-form");
+    var checkboxSelectAll = $('#select-all-checkbox');
+    var checkboxItem = $('input[name="blogsId[]"]');
+    var formActionAll = $('form[name="form-action-all"]');
+    var submitAllBtn = $('.btn-submit-all');
 
+
+    // Show model alert remove blog
     $('#remove-blog-modal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget);
       idRemove = button.data('id');
       idDialog.innerHTML = idRemove;
     });  
 
+    // Submit model alert remove blog
     removeBtn.addEventListener("click", function() {
       removeForm.action = '/news/' + idRemove + '?_method=DELETE';
       removeForm.submit();      
     })
+
+    // Check all when checked Select All
+    checkboxSelectAll.change(function() {
+      var isSeclectAll = $(this).is(':checked');  
+      checkboxItem.prop('checked', isSeclectAll);
+      rerenderSubmitBtn()
+    });
+
+    // Check amount item selected to set status checkboxSelectAll logic
+    checkboxItem.change(function() {
+      var selectAllStatus = $('input[name="blogsId[]"]:checked').length === $('input[name="blogsId[]"]').length;
+      checkboxSelectAll.prop('checked', selectAllStatus);
+      rerenderSubmitBtn()
+    })
+
+    // function rerender submid button
+    function rerenderSubmitBtn() {
+      // if itemChecked Amount is truefy then rerender button without disabled
+      if ($('input[name="blogsId[]"]:checked').length) {
+        submitAllBtn.attr("disabled", false);
+      }
+      else {
+        submitAllBtn.attr("disabled", true);
+      }
+    }
+
+    formActionAll.submit(function(e){
+        //e.preventDefault();
+    });
+
 
   });
 

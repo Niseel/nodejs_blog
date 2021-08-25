@@ -7,6 +7,7 @@ router.get('/create', newsController.create);
 router.post('/store', newsController.store);
 router.get('/:slug', newsController.show);
 router.get('/:id/edit', newsController.edit);
+router.post('/handle-form-actions', newsController.handleFormActions)
 router.put('/:id', newsController.update);
 router.patch('/:id/restore', newsController.restore);
 router.delete('/:id', newsController.remove);

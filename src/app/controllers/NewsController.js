@@ -69,6 +69,20 @@ class NewsController {
             .then(() => res.redirect('back'))
             .catch(next)
     }
+
+    // [POST] /news/handle-form-actions
+    handleFormActions(req, res, next) {
+        if (req.body.action === 'remove') {
+            Post.delete({ _id: { $in: req.body.blogsId }})
+                .then(() => res.redirect('back'))
+                .catch(next)
+        } else {
+            // Another action here
+            res.send('Dont have this action: ', req.body.action)
+        }
+    }
 }
+
+    
 
 module.exports = new NewsController();
